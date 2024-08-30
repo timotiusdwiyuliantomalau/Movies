@@ -15,7 +15,7 @@
         <div class="w-full min-h-screen bg-custom-linear" style="">
             <p class="text-6xl text-white text-center font-bold">Hello World!</p>
         </div>
-        <div>Movie List</div>
-        <p>Movie List adalah tempat mencari film</p>
+        <div>Movie List Best</div>
+        <p class="text-red-500 font-bold">Movie List adalah tempat mencari film terbaik di Indonesia</p>
     </body>
 </html>
