@@ -15,7 +15,10 @@
         <div class="w-full min-h-screen bg-custom-linear" style="">
             <p class="text-6xl text-white text-center font-bold">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam molestiae minus maiores, nemo nam voluptatibus.
             </div></p>
-           
+            <p>lorem ipsum</p>
+            <p>dolmet</p>
+            <p>amet isum</p>
+           <div>Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
         <div> Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, quidem.</div>
         <p class="text-red-500 font-bold">Movie List adalah tempat mencari film terbaik di Indonesia</p>
     </body>
