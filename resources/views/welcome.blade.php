@@ -35,7 +35,7 @@ print_r($data);
         <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
             <h1>Movie.in</h1>
             
-                                                          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio repellat expedita eos voluptate quo, alias non ipsa? Similique, commodi!</p>
+                                                          <p>Best Movie Website!</p>
                                 <form  class="flex rounded-full overflow-hidden"><input type="search" name="" id=""><input type="submit" value="Cari" class="bg-black p-1 cursor-pointer text-white "/><span>
 
             <p></p>
