@@ -14,9 +14,12 @@
 </head>
 
 <body>
-  
+    <?php
+    $data = file_get_contents('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
+    print_r($data);
+    ?>
     <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
-        <h1>Movie.in</h1>
+        {{-- <h1>Movie.in</h1> --}}
         <p>Best Movie Website!</p>
         <form onsubmit="test(event)" class="flex rounded-full overflow-hidden">
             <input type="search" name="" id="">
