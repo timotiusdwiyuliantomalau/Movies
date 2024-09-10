@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<?php
+    if(isset($_GET['search'])){
+        $response = file_get_contents("http://www.omdbapi.com/?apikey=7d314f71&s=".$_GET['search']);
+        $res=json_decode($response)->{'Search'};
+    };
+     $client=new GuzzleHttp\Client();
+    $response=$client->request('GET',"https://api.themoviedb.org/3/movie/popular?languange=en-US&page=1",[
+    'headers'=>['Authorization'=>'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNTk3ODgwNS4wMTg5MjQsInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O0gkL1wMUOhXvNgmagmbezz46MIlnPcaAzqode7QaBg','accept'=>'application/json']
+    ]);
+    $foryou=json_decode($response->getBody())->{'results'};
+    dump($foryou);
+    ?>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Movie.in</title>
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     @vite('resources/css/app.css')
 </head>
 
 <body>
-    <?php
-    $data = file_get_contents('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json');
-    print_r($data);
-    ?>
+
     <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
         {{-- <h1>Movie.in</h1> --}}
         <p>Best Movie Website!</p>
-        <form onsubmit="test(event)" class="flex rounded-full overflow-hidden">
-            <input type="search" name="" id="">
+        <form class="flex rounded-full overflow-hidden">
+            <input type="search" class="pl-3" class="" placeholder="Search for a movie.." name="search" id="">
             <input type="submit" value="Cari" class="bg-black p-1 cursor-pointer text-white " />
             <span>
     </main>
@@ -32,24 +38,35 @@
             <p>Category</p>
             <p>Top Rated</p>
         </div>
-        <div class="w-40">
-            <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg"
-                class="" alt="">
-            <span class="flex justify-between text-white ">
-                <h2 class="text-xl">Judul Film</h2>
-                <span class="flex gap-2">
-                    <p>4.5</p>
-                    |
-                    <p>5jt</p>
+        <div class="flex gap-5 flex-wrap">
+            @foreach ($foryou as $item)
+            <span class="flex flex-col">
+                <img class="w-72" src={{ "https://image.tmdb.org/t/p/w500/".$item->{'poster_path'} }} alt="">
+                <span class="flex justify-between text-white ">
+                    <h1 class="text-xl font-semibold">{{ $item->{'title'} }}</h1>
+                    <p>{{ $item->{'release_date'} }}</p>
+                    <p>{{ $item->{'vote_average'} }}</p>
                 </span>
             </span>
+            @endforeach
+
+        </div>
+        <div class="flex gap-5 flex-wrap">
+            @if(isset($res))
+            @foreach ($res as $item)
+            <div class="w-40">
+                <img src={{ $item->{'Poster'} }}
+                class="" alt="">
+                <span class="flex justify-between text-white ">
+                    <h2 class="text-xl">{{ $item->{'Title'} }}</h2>
+                    <p>{{ $item->{'Year'} }}</p>
+                </span>
+            </div>
+            @endforeach
+            @endif
         </div>
     </main>
     <script>
-        function test(event){
-            event.preventDefault();
-            fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json').then(res=>console.log(res))
-        }
     </script>
 </body>
 
