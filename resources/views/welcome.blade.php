@@ -6,11 +6,17 @@
         $res=json_decode($response)->{'Search'};
     };
      $client=new GuzzleHttp\Client();
-    $response=$client->request('GET',"https://api.themoviedb.org/3/movie/popular?languange=en-US&page=1",[
+    $response=$client->request('GET',"https://api.themoviedb.org/3/movie/popular?languange=en-US&page=2",[
     'headers'=>['Authorization'=>'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNTk3ODgwNS4wMTg5MjQsInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O0gkL1wMUOhXvNgmagmbezz46MIlnPcaAzqode7QaBg','accept'=>'application/json']
     ]);
+    $foryou1=json_decode($response->getBody())->{'results'};
+    $response=$client->request('GET',"https://api.themoviedb.org/3/movie/popular?languange=en-US&page=1",[
+        'headers'=>['Authorization'=>'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNTk3ODgwNS4wMTg5MjQsInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O0gkL1wMUOhXvNgmagmbezz46MIlnPcaAzqode7QaBg ','accept'=>'application/json']
+]);
     $foryou=json_decode($response->getBody())->{'results'};
-    dump($foryou);
+    foreach ($foryou1 as $fy1 ) {
+        array_push($foryou,$fy1);
+    }
     ?>
 
 <head>
@@ -25,7 +31,7 @@
 <body>
 
     <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
-        {{-- <h1>Movie.in</h1> --}}
+        <h1 class="text-2xl">Movie.in</h1>
         <p>Best Movie Website!</p>
         <form class="flex rounded-full overflow-hidden">
             <input type="search" class="pl-3" class="" placeholder="Search for a movie.." name="search" id="">
@@ -41,7 +47,7 @@
         <div class="flex gap-5 flex-wrap">
             @foreach ($foryou as $item)
             <span class="flex flex-col">
-                <img class="w-72" src={{ "https://image.tmdb.org/t/p/w500/".$item->{'poster_path'} }} alt="">
+                <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/".$item->{'poster_path'} }} alt="">
                 <span class="flex justify-between text-white ">
                     <h1 class="text-xl font-semibold">{{ $item->{'title'} }}</h1>
                     <p>{{ $item->{'release_date'} }}</p>
