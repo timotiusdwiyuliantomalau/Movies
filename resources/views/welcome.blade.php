@@ -33,12 +33,12 @@
     <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
         <h1 class="text-2xl">Movie.in</h1>
         <p>Best Movie Website!</p>
-        <form class="flex rounded-full overflow-hidden">
+        {{-- <form class="flex rounded-full overflow-hidden"> --}}
             <input type="search" class="pl-3" class="" placeholder="Search for a movie.." name="search" id="">
             <input type="submit" value="Cari" class="bg-black p-1 cursor-pointer text-white " />
             <span>
     </main>
-    <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
+    {{-- <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
         <div class="flex gap-5 text-yellow-500 self-center font-semibold">
             <p class="text-black bg-yellow-500 rounded-full p-2 font-bold">For You</p>
             <p>Category</p>
@@ -71,7 +71,7 @@
             @endforeach
             @endif
         </div>
-    </main>
+    </main> --}}
     <script>
     </script>
 </body>
