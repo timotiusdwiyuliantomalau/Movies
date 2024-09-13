@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    @dump($data)
     <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
         <h1 class="text-2xl">Movie.in</h1>
         <p>Best Movie Website!</p>
@@ -24,7 +25,7 @@
             <a href="/" class="bg-yellow-500 text-black rounded-full p-2 font-bold">For You</a>
             <a href="/category" class="text-yellow-500 rounded-full p-2 font-bold">Category
             </a>
-            <form action="/topRated" class="text-yellow-500 rounded-full p-2 font-bold">Top Rated</form>
+            <a href="/top_rated" class="text-yellow-500 rounded-full p-2 font-bold">Top Rated</a>
         </div>
         {{-- <div class="flex gap-5 flex-wrap">
             @foreach ($foryou as $item)

@@ -1,11 +1,10 @@
 <?php
 
+use App\Http\Controllers\FetchAPIController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[FetchAPIController::class,'for_you']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -17,8 +16,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/category', function () {
-    return view('category',);
+Route::get('/for_you', function () {
+    return view('for_you');
 });
+
+Route::get('/top_rated',[FetchAPIController::class,'top_rated']);
 
 require __DIR__ . '/auth.php';
