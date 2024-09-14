@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Movie.in</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    @vite('resources/css/app.css')
-</head>
-
-<body>
-    @livewire('app')
-    {{-- <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
+<div>
+    <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
         <h1 class="text-2xl">Movie.in</h1>
         <p>Best Movie Website!</p>
         <form class="flex rounded-full overflow-hidden">
@@ -23,14 +9,13 @@
     </main>
     <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
         <div class="flex gap-5 self-center font-semibold cursor-pointer">
-            <p onclick="navigate('/')" href="/" class="bg-yellow-500 text-black rounded-full p-2 font-bold">For You</p
-                onclick="navigate()">
-            <p onclick="navigate('/')" href="/category" class="text-yellow-500 rounded-full p-2 font-bold">Category
+            <button wire:click="actionFetch" class="bg-yellow-500 text-black rounded-full p-2 font-bold">For
+                You</button>
+            <p class="text-yellow-500 rounded-full p-2 font-bold">Category
             </p>
-            <p onclick="navigate('/top_rated')" href="/top_rated" class="text-yellow-500 rounded-full p-2 font-bold">Top
-                Rated</p>
+            <p wire:click="$actionFetch" class="text-yellow-500 rounded-full p-2 font-bold">Top Rated</p>
         </div>
-        <div class="flex gap-5 flex-wrap">
+        {{-- <div class="flex gap-5 flex-wrap">
             @foreach ($data as $item)
             <span class="flex flex-col">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
@@ -56,9 +41,5 @@
             @endforeach
             @endif
         </div> --}}
-        {{--
-    </main> --}}
-
-</body>
-
-</html>
+    </main>
+</div>
