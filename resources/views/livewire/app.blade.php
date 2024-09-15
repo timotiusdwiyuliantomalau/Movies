@@ -9,14 +9,26 @@
     </main>
     <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
         <div class="flex gap-5 self-center font-semibold cursor-pointer">
-            <button wire:click="actionFetch" class="bg-yellow-500 text-black rounded-full p-2 font-bold">For
+            @if (count(explode("/",$url))==3)
+            <button class="bg-yellow-500 text-black rounded-full p-2 font-bold">For
                 You</button>
+            @else
+            <button onclick="navigate('/')" wire:click="forYouPage" class="text-yellow-500 rounded-full p-2 font-bold">For
+                You</button>
+            @endif
+            @if (count(explode("/",$url))==4&&explode("/",$url)[3]=='top_rated')
+            <button class="text-black bg-yellow-500 rounded-full p-2 font-bold">Top
+                Rated</button>
+            @else
+            <button onclick="navigate('/top_rated')" wire:click="topRatedPage" class="text-yellow-500 rounded-full p-2 font-bold">Top Rated</button>
+            @endif
             <p class="text-yellow-500 rounded-full p-2 font-bold">Category
             </p>
-            <p wire:click="$actionFetch" class="text-yellow-500 rounded-full p-2 font-bold">Top Rated</p>
+
         </div>
-        {{-- <div class="flex gap-5 flex-wrap">
-            @foreach ($data as $item)
+        @if($action_page)
+        <div class="flex gap-5 flex-wrap">
+            @foreach ($action_page as $item)
             <span class="flex flex-col">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
                 <span class="flex justify-between text-white ">
@@ -26,7 +38,9 @@
                 </span>
             </span>
             @endforeach
-        </div> --}}
+        </div>
+        @endif
+
         {{-- <div class="flex gap-5 flex-wrap">
             @if(isset($res))
             @foreach ($res as $item)
@@ -43,3 +57,8 @@
         </div> --}}
     </main>
 </div>
+<script>
+    function navigate(url){
+        window.history.pushState({}, '', url);
+    }
+</script>
