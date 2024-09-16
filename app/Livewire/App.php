@@ -8,6 +8,7 @@ class App extends Component
 {
     public $action_page=null;
     public $url;
+    public $genres;
     public function getCurrentUrl(){
         return request()->url();
     }
@@ -16,7 +17,7 @@ class App extends Component
     $this->url = $this->getCurrentUrl();
 }
     // public static string $url=;
-    public function forYouPage(){
+    public function recommendedPage(){
         $client = new \GuzzleHttp\Client();
         $for_you1 = $client->request('GET', "https://api.themoviedb.org/3/movie/popular?languange=en-US&page=1", [
             'headers' => ['Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNTk3ODgwNS4wMTg5MjQsInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O0gkL1wMUOhXvNgmagmbezz46MIlnPcaAzqode7QaBg', 'Accept' => 'application/json']
@@ -42,8 +43,20 @@ class App extends Component
         $this->url="http://127.0.0.1:8000/top_rated";
     }
     
+    public function genresPage(){
+    $client=new \GuzzleHttp\Client();
+    $response=$client->request("GET","https://api.themoviedb.org/3/genre/movie/list?languange=en-US",['headers'=>[
+        'Authorization'=>'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNjA2NjU3MS4yOTQ0NDksInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NvpH6GCNYQDsnbm1ZkwFfmKtS1qW504s1sJUXJ_eEh8',
+        'Accept'=>'appliction/json',
+    ]]);
+    $data=json_decode($response->getBody())->{'genres'};
+    $this->action_page=null;
+    $this->url="http://127.0.0.1:8000/genres";
+    $this->genres=$data;
+    }
+    
     public function render()
     {
-        return view('livewire.app',["url"=>$this->url]);
+        return view('livewire.app');
     }
 }

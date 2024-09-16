@@ -21,5 +21,5 @@ Route::get('/for_you', function () {
 });
 
 Route::get('/top_rated',[FetchAPIController::class,'top_rated']);
-
+Route::get('/genres',[FetchAPIController::class,'genres']);
 require __DIR__ . '/auth.php';

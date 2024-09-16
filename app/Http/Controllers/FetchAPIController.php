@@ -31,4 +31,14 @@ class FetchAPIController extends Controller
         $data = json_decode($data->getBody())->{'results'};
         return view('welcome')->with('data', $data);
     }
+
+    public function genres(){
+        $client=new \GuzzleHttp\Client();
+        $response=$client->request("GET","https://api.themoviedb.org/3/genre/movie/list?languange=en-US",['headers'=>[
+            'Authorization'=>'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNjA2NjU3MS4yOTQ0NDksInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NvpH6GCNYQDsnbm1ZkwFfmKtS1qW504s1sJUXJ_eEh8',
+            'Accept'=>'appliction/json',
+        ]]);
+        $data=json_decode($response->getBody())->{'genres'};
+        return view('welcome')->with('data', $data);
+    }
 }
