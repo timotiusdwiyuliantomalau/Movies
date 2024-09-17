@@ -32,7 +32,7 @@
 
 
         </div>
-        <div class="flex gap-5 flex-wrap">
+        {{-- <div class="flex gap-5 flex-wrap">
             @if($action_page)
             @foreach ($action_page as $item)
             <span class="flex flex-col">
@@ -51,17 +51,32 @@
             </span>
             @endforeach
             @endif
-        </div>
-
+        </div> --}}
         <div class="flex gap-5 flex-wrap">
-            @if(isset($data[0]->{'title'}))
+            @if($page=="recommended")
             @foreach ($data as $item)
-            <span class="flex flex-col">
+            <span class="flex flex-col w-72">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
                 <span class="flex justify-between text-white ">
                     <h1 class="text-xl font-semibold">{{ $item->{'title'} }}</h1>
-                    <p>{{ $item->{'release_date'} }}</p>
-                    <p>{{ $item->{'vote_average'} }}</p>
+                    <p>{{ substr($item->{'release_date'},0,4) }}</p>
+                    <p>{{ substr($item->{'vote_average'},0,3) }}</p>
+                </span>
+            </span>
+            @endforeach
+            @elseif($page=="top_rated")
+            @foreach ($data as $item)
+            <span class="flex flex-col w-72 relative">
+                <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
+                <span class="absolute right-0 flex">
+                    <x-typ-starburst class="w-20 text-red-700 text-opacity-50" />
+                    <p class="text-white font-bold text-xl absolute top-1/2 -translate-y-1/2 left-1/2  -translate-x-1/2">{{ substr($item->{'vote_average'},0,3) }}</p>
+                </span>
+                
+                <span class="flex justify-between text-white ">
+                    <h1 class="text-xl font-semibold">{{ $item->{'title'} }}</h1>
+                    <p>{{ substr($item->{'release_date'},0,4) }}</p>
+                    
                 </span>
             </span>
             @endforeach

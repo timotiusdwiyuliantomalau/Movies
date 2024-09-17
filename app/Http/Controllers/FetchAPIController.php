@@ -21,7 +21,7 @@ class FetchAPIController extends Controller
         foreach ($for_you2 as $fy2) {
             array_push($data, $fy2);
         }
-        return view('welcome')->with('data',$data);
+        return view('welcome')->with('url',$data);
     }
     public function top_rated() {
         $client = new \GuzzleHttp\Client();
@@ -29,7 +29,7 @@ class FetchAPIController extends Controller
             'headers'=>['Authorization'=>'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZGUzNzM4Y2M2MGNlMjBjMDc3Y2FiNWI3ZDc1MGI5MSIsIm5iZiI6MTcyNjA2NjU3MS4yOTQ0NDksInN1YiI6IjY2ZGJmMTE4MzM0MjExNGYyMWVjNGRmMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NvpH6GCNYQDsnbm1ZkwFfmKtS1qW504s1sJUXJ_eEh8','Accept'=>'application/json']
     ]);
         $data = json_decode($data->getBody())->{'results'};
-        return view('welcome')->with('data', $data);
+        return view('welcome')->with('url', $data);
     }
 
     public function genres(){
@@ -39,6 +39,6 @@ class FetchAPIController extends Controller
             'Accept'=>'appliction/json',
         ]]);
         $data=json_decode($response->getBody())->{'genres'};
-        return view('welcome')->with('data', $data);
+        return view('welcome')->with('url', $data);
     }
 }
