@@ -17,10 +17,9 @@ class App extends Component
     }
     public function __construct()
     {
-        $this->url = $this->getCurrentUrl();
-        if ($this->getCurrentUrl() == "http://127.0.0.1:8000") {
+        if ($this->getCurrentUrl() == "http://localhost:8000") {
             $this->data = $this->recommendedPage();
-        } elseif ($this->getCurrentUrl() == "http://127.0.0.1:8000/top_rated") {
+        } elseif ($this->getCurrentUrl() == "http://localhost:8000/top_rated") {
             $this->data = $this->topRatedPage();
         } else {
             $this->data = $this->genresPage();
@@ -43,7 +42,6 @@ class App extends Component
         }
         $this->url = "http://127.0.0.1:8000";
         $this->data=$data;
-        $this->page="recommended";
         return $data;
     }
     public function topRatedPage()
@@ -55,7 +53,6 @@ class App extends Component
         $data = json_decode($data->getBody())->{'results'};
         $this->url = "http://127.0.0.1:8000/top_rated";
         $this->data=$data;
-        $this->page="top_rated";
         return $data;
     }
 
@@ -70,7 +67,6 @@ class App extends Component
         $this->url = "http://127.0.0.1:8000/genres";
         $this->genres = $data;
         $this->data=$data;
-        $this->page="genres";
         return $data;
     }
 

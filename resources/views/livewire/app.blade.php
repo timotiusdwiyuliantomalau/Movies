@@ -14,6 +14,7 @@
             @else
             <button onclick="navigate('/')" wire:click="recommendedPage"
                 class="text-yellow-500 rounded-full p-2 font-bold">Recommended</button>
+                
             @endif
             @if (count(explode("/",$url))==4&&explode("/",$url)[3]=='top_rated')
             <button class="text-black bg-yellow-500 rounded-full p-2 font-bold">Top
@@ -25,11 +26,10 @@
             @if (count(explode("/",$url))==4&&explode("/",$url)[3]=='genres')
             <button class="text-black bg-yellow-500 rounded-full p-2 font-bold">Genres
                 @else
-                <button wire:click="genresPage" onclick="navigate('/genres')"
+                <a href="/genres" wire:click="genresPage" wire:navigate
                     class="text-yellow-500 rounded-full p-2 font-bold">Genres
-                </button>
+                </a>
                 @endif
-
 
         </div>
         {{-- <div class="flex gap-5 flex-wrap">
@@ -52,8 +52,9 @@
             @endforeach
             @endif
         </div> --}}
+
         <div class="flex gap-5 flex-wrap">
-            @if($page=="recommended")
+            @if($url=="http://127.0.0.1:8000")
             @foreach ($data as $item)
             <span class="flex flex-col w-72">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
@@ -64,19 +65,21 @@
                 </span>
             </span>
             @endforeach
-            @elseif($page=="top_rated")
+            @elseif($url=="http://127.0.0.1:8000/top_rated")
             @foreach ($data as $item)
             <span class="flex flex-col w-72 relative">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
                 <span class="absolute right-0 flex">
                     <x-typ-starburst class="w-20 text-red-700 text-opacity-50" />
-                    <p class="text-white font-bold text-xl absolute top-1/2 -translate-y-1/2 left-1/2  -translate-x-1/2">{{ substr($item->{'vote_average'},0,3) }}</p>
+                    <p
+                        class="text-white font-bold text-xl absolute top-1/2 -translate-y-1/2 left-1/2  -translate-x-1/2">
+                        {{ substr($item->{'vote_average'},0,3) }}</p>
                 </span>
-                
+
                 <span class="flex justify-between text-white ">
                     <h1 class="text-xl font-semibold">{{ $item->{'title'} }}</h1>
                     <p>{{ substr($item->{'release_date'},0,4) }}</p>
-                    
+
                 </span>
             </span>
             @endforeach
