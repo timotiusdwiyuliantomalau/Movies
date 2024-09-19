@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    @livewire('app')
+    <livewire:action-page/>
+    @livewire("app")
     {{-- <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
         <h1 class="text-2xl">Movie.in</h1>
         <p>Best Movie Website!</p>
@@ -58,7 +59,6 @@
         </div> --}}
         {{--
     </main> --}}
-
 </body>
 
 </html>

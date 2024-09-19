@@ -2,16 +2,26 @@
 
 namespace App\Livewire;
 
-use Livewire\Attributes\On;
 use Livewire\Component;
 
-class App extends Component
+class ActionPage extends Component
 {
-    public $genres;
-    public $data;
-    public $page;
-    public function __construct()
-    {
+    public $page="recommended";
+    public $urlAPI;
+    public function recommendedPage(){
+        $this->page="recommended";
+        $this->dispatch("page","recommended");
+    }
+    public function top_ratedPage(){
+        $this->page="top_rated";
+        $this->dispatch("page","top_rated");
+    }
+    public function genresPage(){
+        $this->page="genres";
+        $this->dispatch("page","recommended");
+    }
+    public function __construct(){
+        
     }
     public function recommendedData(){
         $data=[];
@@ -20,7 +30,6 @@ class App extends Component
         }
         return $data;
     }
-
     public function dataPage($urlAPI){
         $client=new \GuzzleHttp\Client();
         $response=$client->request("GET",$urlAPI,[
@@ -33,18 +42,9 @@ class App extends Component
         return $data;
     }
 
-    #[On("page")]
-    public function changePage($page){
-        if($page=='recommended'){
-            $this->data=$this->recommendedData();
-        }
-        if($page=='top_rated'){
-            $this->data=$this->dataPage("https://api.themoviedb.org/3/movie/top_rated?languange=en-US&page=1");
-        }
-    }
-
     public function render()
     {
-        return view('livewire.app');
+        return view('livewire.action-page');
+
     }
 }

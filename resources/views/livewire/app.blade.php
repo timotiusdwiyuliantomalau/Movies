@@ -8,30 +8,53 @@
         </form>
     </main>
     <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
+       
+        {{-- <div class="flex gap-10 flex-wrap">
+            @if ($page=="recommended")
+            @foreach ($data as $datas)
+            @foreach ($datas as $data)
+            <span class="flex flex-col w-72">
+                <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$data->{'poster_path'} }} alt="">
+                <span class="flex justify-between text-white ">
+                    <h1 class="text-xl font-semibold">{{ $data->{'title'} }}</h1>
+                    <p>{{ substr($data->{'release_date'},0,4) }}</p>
+                    <p>{{ substr($data->{'vote_average'},0,3) }}</p>
+                </span>
+            </span>
+            @endforeach
+            @endforeach
+
+            @elseif($page=="top_rated")
+            <p>Top R</p>
+            @else
+
+            @endif
+
+        </div> --}}
+        {{-- {{ dump($page) }}
         <div class="flex gap-5 self-center font-semibold cursor-pointer">
-            @if (count(explode("/",$url))==3)
+            @if ($page=="recommended")
             <button class="bg-yellow-500 text-black rounded-full p-2 font-bold">Recommended</button>
             @else
             <button onclick="navigate('/')" wire:click="recommendedPage"
                 class="text-yellow-500 rounded-full p-2 font-bold">Recommended</button>
-                
             @endif
-            @if (count(explode("/",$url))==4&&explode("/",$url)[3]=='top_rated')
+            @if ($page=="top_rated")
             <button class="text-black bg-yellow-500 rounded-full p-2 font-bold">Top
                 Rated</button>
             @else
             <button onclick="navigate('/top_rated')" wire:click="topRatedPage"
                 class="text-yellow-500 rounded-full p-2 font-bold">Top Rated</button>
             @endif
-            @if (count(explode("/",$url))==4&&explode("/",$url)[3]=='genres')
+            @if ($page=="genres")
             <button class="text-black bg-yellow-500 rounded-full p-2 font-bold">Genres
                 @else
-                <a href="/genres" wire:click="genresPage" wire:navigate
+                <button onclick="navigate('/genres')" wire:click="genresPage"
                     class="text-yellow-500 rounded-full p-2 font-bold">Genres
-                </a>
+                </button>
                 @endif
 
-        </div>
+        </div> --}}
         {{-- <div class="flex gap-5 flex-wrap">
             @if($action_page)
             @foreach ($action_page as $item)
@@ -52,9 +75,10 @@
             @endforeach
             @endif
         </div> --}}
+        {{-- {{ dump($page) }}
 
         <div class="flex gap-5 flex-wrap">
-            @if($url=="http://127.0.0.1:8000")
+            @if($page=="recommended")
             @foreach ($data as $item)
             <span class="flex flex-col w-72">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
@@ -65,7 +89,7 @@
                 </span>
             </span>
             @endforeach
-            @elseif($url=="http://127.0.0.1:8000/top_rated")
+            @elseif($page=="top_rated")
             @foreach ($data as $item)
             <span class="flex flex-col w-72 relative">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$item->{'poster_path'} }} alt="">
@@ -90,7 +114,7 @@
             </span>
             @endforeach
             @endif
-        </div>
+        </div> --}}
         {{-- <div class="flex gap-5 flex-wrap">
             @if(isset($res))
             @foreach ($res as $item)
