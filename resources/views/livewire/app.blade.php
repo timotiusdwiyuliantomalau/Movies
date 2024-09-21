@@ -9,11 +9,10 @@
     </main>
     <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
        
-        {{-- <div class="flex gap-10 flex-wrap">
-            @if ($page=="recommended")
-            @foreach ($data as $datas)
+        <div class="flex gap-10 flex-wrap">
+            @foreach ($this->recommendedData() as $datas)
             @foreach ($datas as $data)
-            <span class="flex flex-col w-72">
+            <span wire:key="{{ $data->{'id'} }}" class="flex flex-col w-72">
                 <img class="w-72" src={{ "https://image.tmdb.org/t/p/original/" .$data->{'poster_path'} }} alt="">
                 <span class="flex justify-between text-white ">
                     <h1 class="text-xl font-semibold">{{ $data->{'title'} }}</h1>
@@ -24,13 +23,7 @@
             @endforeach
             @endforeach
 
-            @elseif($page=="top_rated")
-            <p>Top R</p>
-            @else
-
-            @endif
-
-        </div> --}}
+        </div>
         {{-- {{ dump($page) }}
         <div class="flex gap-5 self-center font-semibold cursor-pointer">
             @if ($page=="recommended")
