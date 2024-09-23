@@ -1,4 +1,12 @@
 <script setup>
+import { ref } from 'vue';
+let pages = ref("recommended");
+function changePage(page) {
+  pages.value = page;
+  page != "recommended" && window.history.pushState(null, null, page);
+  page == "recommended" && window.history.pushState(null, null, "/");
+}
+
 </script>
 
 <template>
@@ -11,10 +19,14 @@
     </form>
   </main>
   <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
-  <div class="flex gap-5 self-center font-semibold cursor-pointer">
-        <button class="bg-yellow-500 text-black rounded-full p-2 font-bold">Recommended</button>
-        <button class="text-yellow-500 rounded-full p-2">Top Rated</button>
-        <button class="text-yellow-500 rounded-full p-2">Genres</button>
+    <div class="flex gap-5 self-center font-semibold cursor-pointer">
+      <button @click="changePage('recommended')"
+        :class="pages == 'recommended' ? 'bg-yellow-500 text-black rounded-full p-2 font-bold' : 'text-yellow-500 p-2'">Recommended</button>
+      <button @click="changePage('top_rated')"
+        :class="pages == 'top_rated' ? 'bg-yellow-500 text-black rounded-full p-2 font-bold' : 'text-yellow-500 p-2'">Top
+        Rated</button>
+      <button @click="changePage('genres')"
+        :class="pages == 'genres' ? 'bg-yellow-500 text-black rounded-full p-2 font-bold' : 'text-yellow-500 p-2'">Genres</button>
     </div>
   </main>
   <!-- <main class="bg-[#1F1414] w-full min-h-screen flex flex-col">
