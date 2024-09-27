@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useModalStore } from '../utils/pinia/modalStore';
 import { ref, useTemplateRef } from 'vue';
 
 const movie = ref<any>({});
@@ -32,6 +33,8 @@ function playTrailer() {
   playVideo.value = !playVideo.value;
 }
 
+const modal = useModalStore();
+
 fetchAPI(props.id);
 </script>
 
@@ -56,5 +59,6 @@ fetchAPI(props.id);
       allowfullscreen></iframe>
     <button class="bg-red-500 p-3" @click="playTrailer()">Klik</button>
     <button class="bg-red-600 p-3">Buy Ticket</button>
+    <button @click="modal.open()" class="p-2 bg-green-500">+</button>
   </div>
 </template>
