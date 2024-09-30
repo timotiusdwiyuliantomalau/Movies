@@ -58,7 +58,6 @@ fetchAPI(props.id);
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen></iframe>
     <button class="bg-red-500 p-3" @click="playTrailer()">Klik</button>
-    <button class="bg-red-600 p-3">Buy Ticket</button>
-    <button @click="modal.open()" class="p-2 bg-green-500">+</button>
+    <button @click="modal.open('top-1/2')" class="bg-red-600 p-3">Buy Ticket</button>
   </div>
 </template>

@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { useModalStore } from '../utils/pinia/modalStore';
 import { ref } from 'vue';
 const modal = ref("signup");
+const isModal = useModalStore();
 
 </script>
 <template>
-    <div class="z-50 absolute  -translate-x-1/2 left-1/2 top-12">
-        <main v-if="modal=='signup'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
+    <div :class="'z-50 absolute  -translate-x-1/2 left-1/2 ' + isModal.position">
+        <main v-if="modal == 'signup'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
             <div class="flex mb-6">
                 <button class="w-1/2 py-2 bg-teal-500 text-white font-bold rounded-l-lg">Sign Up</button>
-                <button @click="modal='login'" class="w-1/2 py-2 bg-gray-700 text-gray-400 font-bold rounded-r-lg">Sign In</button>
+                <button @click="modal = 'login'"
+                    class="w-1/2 py-2 bg-gray-700 text-gray-400 font-bold rounded-r-lg">Sign
+                    In</button>
             </div>
             <h2 class="text-center text-white text-lg font-bold mb-6">Sign Up for Free</h2>
             <form>
@@ -38,9 +42,10 @@ const modal = ref("signup");
             </form>
         </main>
 
-        <main v-if="modal=='login'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
+        <main v-if="modal == 'login'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
             <div class="flex mb-6">
-                <button @click="modal='signup'" class="w-1/2 py-2  text-gray-400 font-bold rounded-l-lg bg-gray-700">Sign Up</button>
+                <button @click="modal = 'signup'"
+                    class="w-1/2 py-2  text-gray-400 font-bold rounded-l-lg bg-gray-700">Sign Up</button>
                 <button class="w-1/2 py-2  bg-teal-500 text-white font-bold rounded-r-lg">Sign In</button>
             </div>
             <h2 class="text-center text-white text-lg font-bold mb-6">Sign In to Your Account</h2>
