@@ -27,7 +27,6 @@ async function fetchAPI(id: string) {
   resVideo = resVideo[resVideo.length - 1];
   movie.value = result;
   video.value = resVideo;
-  console.log(resVideo);
 };
 function playTrailer() {
   playVideo.value = !playVideo.value;

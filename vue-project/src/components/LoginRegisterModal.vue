@@ -2,7 +2,28 @@
 import { useModalStore } from '../utils/pinia/modalStore';
 import { ref } from 'vue';
 const modal = ref("signup");
+const name = ref('');
+const email = ref('');
+const password = ref('');
+const resident_card_number = ref('');
 const isModal = useModalStore();
+fetch('http://localhost:8000/sanctum/csrf-cookie');
+async function handleRegister() {
+    const response = await fetch("http://localhost:8000/register", {
+        method: "POST",
+        body: JSON.stringify({
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            resident_card_number: resident_card_number.value,
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const result = await response.json();
+    console.log(result);
+}
 
 </script>
 <template>
@@ -15,23 +36,21 @@ const isModal = useModalStore();
                     In</button>
             </div>
             <h2 class="text-center text-white text-lg font-bold mb-6">Sign Up for Free</h2>
-            <form>
+            <form @submit.prevent="handleRegister()">
                 <div class="flex mb-4">
-                    <input type="text" placeholder="First Name*"
+                    <input v-model="name" type="text" placeholder="Name*"
                         class="w-1/2 p-2 mr-2 bg-gray-800 text-white border border-gray-600 rounded">
-                    <input type="text" placeholder="Last Name*"
-                        class="w-1/2 p-2 ml-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
-                    <input type="text" placeholder="Nomor KTP*"
+                    <input type="text" v-model="resident_card_number" placeholder="Nomor KTP*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
-                    <input type="email" placeholder="Email Address*"
+                    <input type="email" v-model="email" placeholder="Email Address*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
-                    <input type="password" placeholder="Set A Password*"
+                    <input type="password" v-model="password" placeholder="Set A Password*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-6">
