@@ -10,7 +10,6 @@ export const useModalStore = defineStore('modal', {
         this.position=position; 
       },close() {
         this.status = false;
-        this.overflow = "auto";
       }
     },
   })

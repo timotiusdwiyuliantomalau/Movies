@@ -1,29 +1,52 @@
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { useModalStore } from '../utils/pinia/modalStore';
 import { ref } from 'vue';
-const modal = ref("signup");
-const name = ref('');
-const email = ref('');
-const password = ref('');
-const resident_card_number = ref('');
-const isModal = useModalStore();
-fetch('http://localhost:8000/sanctum/csrf-cookie');
-async function handleRegister() {
-    const response = await fetch("http://localhost:8000/register", {
-        method: "POST",
-        body: JSON.stringify({
-            name: name.value,
-            email: email.value,
-            password: password.value,
-            resident_card_number: resident_card_number.value,
-        }),
-        headers: {
-            'Content-Type': 'application/json'
+export default defineComponent({
+    name: 'LoginRegisterModal',
+    setup() {
+        const modal = ref("signup");
+        const [name, email, password, password_confirmation, resident_number] = [ref(''), ref(''), ref(''), ref(''), ref(''), ref('')];
+        const isModal = useModalStore();
+        fetch('http://localhost:8000/sanctum/csrf-cookie');
+        async function handleRegister() {
+            const response = await fetch("http://localhost:8000/api/register", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: name.value,
+                    email: email.value,
+                    password: password.value,
+                    password_confirmation: password_confirmation.value,
+                    resident_number: resident_number.value,
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const result = await response.json();
+            console.log(result);
         }
-    });
-    const result = await response.json();
-    console.log(result);
-}
+
+        async function handleLogin() {
+            fetch("http://localhost:8000/sanctum/csrf-cookie")
+            const response = await fetch("http://localhost:8000/api/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value,
+                    resident_number: resident_number.value,
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const result = await response.json();
+            console.log(result);
+        }
+
+        return { modal, name, email, password, password_confirmation, resident_number, isModal, handleRegister, handleLogin };
+    },
+})
 
 </script>
 <template>
@@ -37,12 +60,12 @@ async function handleRegister() {
             </div>
             <h2 class="text-center text-white text-lg font-bold mb-6">Sign Up for Free</h2>
             <form @submit.prevent="handleRegister()">
-                <div class="flex mb-4">
+                <div class="mb-4">
                     <input v-model="name" type="text" placeholder="Name*"
-                        class="w-1/2 p-2 mr-2 bg-gray-800 text-white border border-gray-600 rounded">
+                        class="w-full p-2 mr-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
-                    <input type="text" v-model="resident_card_number" placeholder="Nomor KTP*"
+                    <input type="text" v-model="resident_number" placeholder="Resident Number*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
@@ -54,7 +77,7 @@ async function handleRegister() {
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-6">
-                    <input type="password" placeholder="Confirm Password*"
+                    <input type="password" v-model="password_confirmation" placeholder="Confirm Password*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <button type="submit" class="w-full py-2 bg-teal-500 text-white font-bold rounded">GET STARTED</button>
@@ -68,17 +91,17 @@ async function handleRegister() {
                 <button class="w-1/2 py-2  bg-teal-500 text-white font-bold rounded-r-lg">Sign In</button>
             </div>
             <h2 class="text-center text-white text-lg font-bold mb-6">Sign In to Your Account</h2>
-            <form>
+            <form @submit.prevent="handleLogin()">
                 <div class="mb-4">
-                    <input type="text" placeholder="Nomor KTP*"
+                    <input v-model="resident_number" required type="text" placeholder="Resident Number*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
-                    <input type="email" placeholder="Email Address*"
+                    <input v-model="email" required type="email" placeholder="Email Address*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <div class="mb-4">
-                    <input type="password" placeholder="Password*"
+                    <input v-model="password" required type="password" placeholder="Password*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
                 <button type="submit" class="w-full py-2 bg-teal-500 text-white font-bold rounded">LOGIN</button>
