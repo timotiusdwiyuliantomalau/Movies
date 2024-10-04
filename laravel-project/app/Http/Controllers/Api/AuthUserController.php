@@ -49,7 +49,5 @@ public function cinema($id){
     $cinema=Cinema::find($id);
     $cinema->time=json_decode($cinema->time);
     return response()->json(['data'=>$cinema],200);
-
 }
-
 }

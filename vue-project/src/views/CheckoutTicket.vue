@@ -4,7 +4,7 @@ const props = defineProps({
     id: { type: String, required: true }
 });
 const detailMovie = ref<any>({});
-const [name, cinemas] = [ref(''), ref<any>({})];
+const [name, cinemas, price, seat, time, theater, date, provider] = [ref<any>(''), ref<any>({}), ref<any>(""), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>("")];
 const totalTicket = ref<number>(1);
 
 async function fetchMovie(id: string) {
@@ -31,17 +31,31 @@ async function changeId(event: any) {
     result.data.total_seat = data.seat;
     result.data.theater = data.theater;
     cinemas.value = result.data;
+    price.value = result.data.price;
 }
 function setSeat(event: any) {
-    if(totalTicket.value == 0) return;
-    totalTicket.value = totalTicket.value - 1;
-    setTimeout(() => {
-        event.target.classList.toggle('bg-yellow-500');
-        event.target.classList.toggle('font-bold');
+    if (event.target.className.split(" ")[event.target.className.split(" ").length - 1] == 'bg-yellow-500') {
+        totalTicket.value = totalTicket.value + 1;
+        const result=seat.value.filter((s:any)=>s!=event.target.textContent);
+        seat.value=result;
+        setTimeout(() => {
+            event.target.classList.remove('font-bold');
+            event.target.classList.remove('bg-yellow-500');
+        }, 200)
 
-    }, 200)
-
+    } else {
+        if (totalTicket.value == 0) return;
+        totalTicket.value = totalTicket.value - 1;
+        seat.value.push(event.target.textContent);
+        setTimeout(() => {
+            event.target.classList.add('font-bold');
+            event.target.classList.add('bg-yellow-500');
+        }, 200)
+    }
 }
+function handleBuyTicket() {
+        fetch("http://localhost:8000/api/buy-ticket", {})
+    }
 </script>
 <template>
     <div class="flex gap-12">
@@ -54,29 +68,29 @@ function setSeat(event: any) {
             </span>
         </main>
         <main>
-            <form>
+            <form @submit.prevent="handleBuyTicket()">
                 <div><label for="name">Name</label><input v-model="name" />
                 </div>
                 <div>
                     <span>
                         <label for="cinema">Cinema</label>
-                        <select @change="changeId" id="cinema">
+                        <select @change="changeId" id="cinema" v-model="provider">
                             <option value=1>XXI</option>
                             <option value=2>CGV</option>
                             <option value=3>Cinepolis</option>
                         </select>
                     </span>
                     <span>
-                        <input type="date" name="" id="">
+                        <input v-model="date" type="date" name="" id="">
                     </span>
                 </div>
                 <div class="flex">
                     <div>
                         <div v-for="(cinema, index) in cinemas.time" :key="index">
-                            <input type="radio" :value="cinema" id="time">
-                            <label for="time">{{ cinema }}</label>
+                            <input v-model="time" type="radio" :value="cinema" :id="index.toString()">
+                            <label :for="index.toString()">{{ cinema }}</label>
                         </div>
-                        <select id="theater">
+                        <select v-model="theater" id="theater">
                             <option v-for="(theater, index) in cinemas.theater" :key="index" :value="theater">{{ theater
                                 }}
                             </option>
@@ -85,21 +99,21 @@ function setSeat(event: any) {
                     <div>
                         <span class="grid gap-3 grid-cols-8 p-3">
                             <p @click="setSeat"
-                                :class="totalTicket == 0 ? 'cursor-not-allowed w-6 h-6 text-center rounded-md' : 'w-6 h-6 text-center rounded-md hover:bg-yellow-400 cursor-pointer'"
-                                v-for="(seat, index) in cinemas.total_seat" :key="index">{{ seat }}</p>
+                                :class="'w-6 h-6 text-center rounded-md hover:bg-yellow-400 cursor-pointer'"
+                                v-for="(seats, index) in cinemas.total_seat" :key="index">{{ seats }}</p>
                         </span>
                     </div>
                 </div>
                 <div class="flex gap-10">
                     <p>Total Ticket</p>
                     <span class="flex">
-                        <p>-</p>
-                        <p>{{ totalTicket }}</p>
-                        <p>+</p>
+                        <p @click="totalTicket = totalTicket - 1;price -= cinemas.price" v-if="totalTicket > 0">-</p>
+                        <p>{{ price/cinemas.price }}</p>
+                        <p @click="totalTicket = totalTicket + 1; price += cinemas.price">+</p>
                     </span>
                 </div>
                 <div>
-                    Price : ${{ cinemas.price }}
+                    Price : ${{ price }}
                 </div>
                 <input type="submit" value="Buy">
             </form>
