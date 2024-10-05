@@ -4,7 +4,7 @@ const props = defineProps({
     id: { type: String, required: true }
 });
 const detailMovie = ref<any>({});
-const [name, cinemas, price, seat, time, theater, date, provider] = [ref<any>(''), ref<any>({}), ref<any>(""), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>("")];
+const [name, cinemas, price, seat, time, theater, date, provider] = [ref(''), ref<any>({}), ref<any>(""), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>(0)];
 const totalTicket = ref<number>(1);
 
 async function fetchMovie(id: string) {
@@ -36,8 +36,8 @@ async function changeId(event: any) {
 function setSeat(event: any) {
     if (event.target.className.split(" ")[event.target.className.split(" ").length - 1] == 'bg-yellow-500') {
         totalTicket.value = totalTicket.value + 1;
-        const result=seat.value.filter((s:any)=>s!=event.target.textContent);
-        seat.value=result;
+        const result = seat.value.filter((s: any) => s != event.target.textContent);
+        seat.value = result;
         setTimeout(() => {
             event.target.classList.remove('font-bold');
             event.target.classList.remove('bg-yellow-500');
@@ -53,9 +53,27 @@ function setSeat(event: any) {
         }, 200)
     }
 }
-function handleBuyTicket() {
-        fetch("http://localhost:8000/api/buy-ticket", {})
-    }
+async function handleBuyTicket() {
+    const res = await fetch("http://localhost:8000/api/ticket", {
+        method: "POST",
+        body: JSON.stringify({
+            seat: JSON.stringify(seat.value),
+            date: date.value,
+            time: time.value,
+            provider: provider.value,
+            theater: theater.value,
+            user_id: 1,
+            total_ticket: price.value / cinemas.value.price,
+            movie_id: props.id,
+            price: price.value,
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const result = await res.json();
+    console.log(result);
+}
 </script>
 <template>
     <div class="flex gap-12">
@@ -69,8 +87,6 @@ function handleBuyTicket() {
         </main>
         <main>
             <form @submit.prevent="handleBuyTicket()">
-                <div><label for="name">Name</label><input v-model="name" />
-                </div>
                 <div>
                     <span>
                         <label for="cinema">Cinema</label>
@@ -84,12 +100,14 @@ function handleBuyTicket() {
                         <input v-model="date" type="date" name="" id="">
                     </span>
                 </div>
-                <div class="flex">
-                    <div>
-                        <div v-for="(cinema, index) in cinemas.time" :key="index">
+                <div v-if="provider>0" class="flex flex-col">
+                    <div class="flex gap-5">
+                        <div>
+                        <div v-for="(cinema, index) in cinemas.time" :key="index" class="">
                             <input v-model="time" type="radio" :value="cinema" :id="index.toString()">
                             <label :for="index.toString()">{{ cinema }}</label>
                         </div>
+                    </div>
                         <select v-model="theater" id="theater">
                             <option v-for="(theater, index) in cinemas.theater" :key="index" :value="theater">{{ theater
                                 }}
@@ -103,19 +121,20 @@ function handleBuyTicket() {
                                 v-for="(seats, index) in cinemas.total_seat" :key="index">{{ seats }}</p>
                         </span>
                     </div>
-                </div>
-                <div class="flex gap-10">
+                    <div class="flex gap-10">
                     <p>Total Ticket</p>
                     <span class="flex">
-                        <p @click="totalTicket = totalTicket - 1;price -= cinemas.price" v-if="totalTicket > 0">-</p>
-                        <p>{{ price/cinemas.price }}</p>
+                        <p @click="totalTicket = totalTicket - 1; price -= cinemas.price" v-if="totalTicket > 0">-</p>
+                        <p>{{ price / cinemas.price }}</p>
                         <p @click="totalTicket = totalTicket + 1; price += cinemas.price">+</p>
                     </span>
                 </div>
                 <div>
                     Price : ${{ price }}
                 </div>
-                <input type="submit" value="Buy">
+                </div>
+              
+                <button type="submit">Buy</button>
             </form>
         </main>
     </div>

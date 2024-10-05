@@ -23,8 +23,8 @@ export default defineComponent({
                     'Content-Type': 'application/json'
                 }
             });
-            const result = await response.json();
-            console.log(result);
+        //     const result = await response.json();
+        //     console.log(result);
         }
 
         async function handleLogin() {

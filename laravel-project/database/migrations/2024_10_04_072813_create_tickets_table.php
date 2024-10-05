@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('user_id');
-            $table->foreignId('film_id');
-            $table->string('name');
+            $table->foreignId('user_id')->constrained(
+                table: 'users', indexName: 'tickets_user_id'
+            );
+            $table->bigInteger('movie_id');
             $table->json('seat');
             $table->string('theater');
             $table->float('price');
             $table->string('date');
             $table->string('time');
+            $table->integer('total_ticket');
         });
     }
 
