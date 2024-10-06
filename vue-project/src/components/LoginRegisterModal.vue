@@ -5,7 +5,7 @@ import { ref } from 'vue';
 export default defineComponent({
     name: 'LoginRegisterModal',
     setup() {
-        const modal = ref("signup");
+        const [modal,errorAuth] = [ref("login"), ref<string>("")];
         const [name, email, password, password_confirmation, resident_number] = [ref(''), ref(''), ref(''), ref(''), ref(''), ref('')];
         const isModal = useModalStore();
         fetch('http://localhost:8000/sanctum/csrf-cookie');
@@ -23,8 +23,12 @@ export default defineComponent({
                     'Content-Type': 'application/json'
                 }
             });
-        //     const result = await response.json();
-        //     console.log(result);
+                const result = await response.json();
+                if (result.error) {
+                    errorAuth.value = result.error;
+                }else{
+                    modal.value = 'login';
+                }
         }
 
         async function handleLogin() {
@@ -41,7 +45,14 @@ export default defineComponent({
                 }
             });
             const result = await response.json();
-            console.log(result);
+            let d = new Date();
+            d.setTime(d.getTime() + 60 * 60 * 1000);
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, }) + ";" + expires+";path=/";
+            if(result.error){
+                errorAuth.value = result.error;
+            }
+
         }
 
         return { modal, name, email, password, password_confirmation, resident_number, isModal, handleRegister, handleLogin };
@@ -50,7 +61,7 @@ export default defineComponent({
 
 </script>
 <template>
-    <div :class="'z-50 absolute  -translate-x-1/2 left-1/2 ' + isModal.position">
+    <div :class="'z-50 fixed  -translate-x-1/2 left-1/2 ' + isModal.position">
         <main v-if="modal == 'signup'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
             <div class="flex mb-6">
                 <button class="w-1/2 py-2 bg-teal-500 text-white font-bold rounded-l-lg">Sign Up</button>

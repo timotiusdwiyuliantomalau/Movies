@@ -2,10 +2,7 @@
 import { useModalStore } from '../utils/pinia/modalStore';
 import { ref, useTemplateRef } from 'vue';
 
-const movie = ref<any>({});
-const video = ref<any>({});
-const playVideo = ref<boolean>(false);
-const iframeTrailer = useTemplateRef('iframeTrailer');
+const [movie,video,playVideo,cookieUser] = [ref<any>({}),ref<any>({}),ref<boolean>(false),ref<any>(null)];
 const props = defineProps({
   id: { type: String, required: true },
 });
@@ -27,13 +24,12 @@ async function fetchAPI(id: string) {
   resVideo = resVideo[resVideo.length - 1];
   movie.value = result;
   video.value = resVideo;
+  cookieUser.value = decodeURIComponent(document.cookie);
 };
 function playTrailer() {
   playVideo.value = !playVideo.value;
 }
-
 const modal = useModalStore();
-
 fetchAPI(props.id);
 </script>
 
@@ -57,6 +53,7 @@ fetchAPI(props.id);
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen></iframe>
     <button class="bg-red-500 p-3" @click="playTrailer()">Klik</button>
-    <button @click="modal.open('top-1/2')" class="bg-red-600 p-3">Buy Ticket</button>
+    <router-link :to="`/checkout/${movie.id}`" v-if="cookieUser.length > 0" class="bg-red-600 p-3">Buy Ticket</router-link>
+    <button v-if="cookieUser.length == 0" @click="modal.open('top-[4.5rem]')" class="bg-red-600 p-3">Buy Ticket</button>
   </div>
 </template>

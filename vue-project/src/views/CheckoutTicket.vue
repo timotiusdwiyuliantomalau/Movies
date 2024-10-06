@@ -4,8 +4,8 @@ const props = defineProps({
     id: { type: String, required: true }
 });
 const detailMovie = ref<any>({});
-const [name, cinemas, price, seat, time, theater, date, provider] = [ref(''), ref<any>({}), ref<any>(""), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>(0)];
-const totalTicket = ref<number>(1);
+const [cinemas, price, seat, time, theater, date, provider, cookieUser] = [ref<any>(), ref<number>(0), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>(""), ref()];
+const [dynamicTicket, totalTicket] = [ref<number>(1), ref<number>(1)];
 
 async function fetchMovie(id: string) {
     const res = await fetch(`https://api.themoviedb.org/3/movie/${id}`, {
@@ -16,6 +16,11 @@ async function fetchMovie(id: string) {
     });
     const result = await res.json();
     detailMovie.value = result;
+    cookieUser.value = decodeURIComponent(document.cookie).split('=');
+    cookieUser.value.map((c: any, i: number) => {
+        if (c == 'User') cookieUser.value = JSON.parse(cookieUser.value[i + 1])
+    })
+
 }
 fetchMovie(props.id);
 async function changeId(event: any) {
@@ -32,10 +37,11 @@ async function changeId(event: any) {
     result.data.theater = data.theater;
     cinemas.value = result.data;
     price.value = result.data.price;
+    provider.value = result.data.provider;
 }
 function setSeat(event: any) {
     if (event.target.className.split(" ")[event.target.className.split(" ").length - 1] == 'bg-yellow-500') {
-        totalTicket.value = totalTicket.value + 1;
+        dynamicTicket.value = dynamicTicket.value + 1;
         const result = seat.value.filter((s: any) => s != event.target.textContent);
         seat.value = result;
         setTimeout(() => {
@@ -44,8 +50,8 @@ function setSeat(event: any) {
         }, 200)
 
     } else {
-        if (totalTicket.value == 0) return;
-        totalTicket.value = totalTicket.value - 1;
+        if (dynamicTicket.value == 0) return;
+        dynamicTicket.value = dynamicTicket.value - 1;
         seat.value.push(event.target.textContent);
         setTimeout(() => {
             event.target.classList.add('font-bold');
@@ -62,7 +68,7 @@ async function handleBuyTicket() {
             time: time.value,
             provider: provider.value,
             theater: theater.value,
-            user_id: 1,
+            user_id: cookieUser.value.id,
             total_ticket: price.value / cinemas.value.price,
             movie_id: props.id,
             price: price.value,
@@ -72,7 +78,6 @@ async function handleBuyTicket() {
         }
     });
     const result = await res.json();
-    console.log(result);
 }
 </script>
 <template>
@@ -90,7 +95,8 @@ async function handleBuyTicket() {
                 <div>
                     <span>
                         <label for="cinema">Cinema</label>
-                        <select @change="changeId" id="cinema" v-model="provider">
+                        <select @change="changeId" id="cinema">
+                            <option value="">Select Cinema</option>
                             <option value=1>XXI</option>
                             <option value=2>CGV</option>
                             <option value=3>Cinepolis</option>
@@ -100,14 +106,14 @@ async function handleBuyTicket() {
                         <input v-model="date" type="date" name="" id="">
                     </span>
                 </div>
-                <div v-if="provider>0" class="flex flex-col">
+                <div v-if="cinemas != null" class="flex flex-col">
                     <div class="flex gap-5">
                         <div>
-                        <div v-for="(cinema, index) in cinemas.time" :key="index" class="">
-                            <input v-model="time" type="radio" :value="cinema" :id="index.toString()">
-                            <label :for="index.toString()">{{ cinema }}</label>
+                            <div v-for="(cinema, index) in cinemas.time" :key="index" class="">
+                                <input v-model="time" type="radio" :value="cinema" :id="index.toString()">
+                                <label :for="index.toString()">{{ cinema }}</label>
+                            </div>
                         </div>
-                    </div>
                         <select v-model="theater" id="theater">
                             <option v-for="(theater, index) in cinemas.theater" :key="index" :value="theater">{{ theater
                                 }}
@@ -122,18 +128,19 @@ async function handleBuyTicket() {
                         </span>
                     </div>
                     <div class="flex gap-10">
-                    <p>Total Ticket</p>
-                    <span class="flex">
-                        <p @click="totalTicket = totalTicket - 1; price -= cinemas.price" v-if="totalTicket > 0">-</p>
-                        <p>{{ price / cinemas.price }}</p>
-                        <p @click="totalTicket = totalTicket + 1; price += cinemas.price">+</p>
-                    </span>
+                        <p>Total Ticket</p>
+                        <span class="flex">
+                            <p @click="if (totalTicket != 1) { totalTicket--; dynamicTicket--; price = cinemas.price * totalTicket }"
+                                v-if="dynamicTicket > 0">- </p>
+                            <p>{{ totalTicket }}</p>
+                            <p @click="totalTicket++; dynamicTicket++; price = cinemas.price * totalTicket">+</p>
+                        </span>
+                    </div>
+                    <div>
+                        Price : ${{ Math.round(price*100)/100 }}
+                    </div>
                 </div>
-                <div>
-                    Price : ${{ price }}
-                </div>
-                </div>
-              
+
                 <button type="submit">Buy</button>
             </form>
         </main>
