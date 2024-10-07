@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('theater');
             $table->float('price');
             $table->string('date');
+            $table->string('provider');
             $table->string('time');
             $table->integer('total_ticket');
         });

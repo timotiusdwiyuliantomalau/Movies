@@ -21,9 +21,9 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         try{
-        $validated=$request->validate(['user_id'=>'required','movie_id'=>'required','seat'=>'required','theater'=>'required','price'=>'required','date'=>'required','time'=>'required','total_ticket'=>'required']);
+        $validated=$request->validate(['user_id'=>'required','movie_id'=>'required','seat'=>'required','theater'=>'required','price'=>'required','date'=>'required','time'=>'required','provider'=>'required','total_ticket'=>'required']);
         Ticket::create($validated);
-        return response()->json(['Ticket has been bought!']);
+        return response()->json('Ticket has been bought!',200);
         }
         catch(\Exception $e){
             return response()->json(['error'=>$e->getMessage()],400);

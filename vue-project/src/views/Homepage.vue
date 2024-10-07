@@ -29,6 +29,7 @@ export default defineComponent({
       <main class="w-full min-h-screen bg-custom-linear items-center flex flex-col justify-center" style="">
         <h1 class="text-2xl">Movie.in</h1>
         <p>Best Movie Website!</p>
+        <img class="w-[20rem]" src="/sold-image.png" alt="">
         <form class="flex rounded-full overflow-hidden">
           <input type="search" class="pl-3" placeholder="Search for a movie.." name="search" id="">
           <input type="submit" value="Cari" class="bg-black p-1 cursor-pointer text-white " />

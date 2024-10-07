@@ -53,7 +53,7 @@ fetchAPI(props.id);
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen></iframe>
     <button class="bg-red-500 p-3" @click="playTrailer()">Klik</button>
-    <router-link :to="`/checkout/${movie.id}`" v-if="cookieUser.length > 0" class="bg-red-600 p-3">Buy Ticket</router-link>
-    <button v-if="cookieUser.length == 0" @click="modal.open('top-[4.5rem]')" class="bg-red-600 p-3">Buy Ticket</button>
+    <router-link :to="`/checkout/${movie.id}`" v-if="cookieUser!=null&&cookieUser.length>0" class="bg-red-600 p-3">Buy Ticket</router-link>
+    <button v-if="cookieUser!=null&&cookieUser.length==0" @click="modal.open('top-[4.5rem]')" class="bg-red-600 p-3">Buy Ticket</button>
   </div>
 </template>

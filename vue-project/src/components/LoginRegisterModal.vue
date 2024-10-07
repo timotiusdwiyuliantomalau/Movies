@@ -2,11 +2,13 @@
 import { defineComponent } from 'vue';
 import { useModalStore } from '../utils/pinia/modalStore';
 import { ref } from 'vue';
+import { useFlashMessageSuccess } from '../utils/pinia/flashMessageSuccess';
 export default defineComponent({
     name: 'LoginRegisterModal',
     setup() {
-        const [modal,errorAuth] = [ref("login"), ref<string>("")];
+        const [modal, errorAuth] = [ref("login"), ref<string>("")];
         const [name, email, password, password_confirmation, resident_number] = [ref(''), ref(''), ref(''), ref(''), ref(''), ref('')];
+        const flashSuccess = useFlashMessageSuccess();
         const isModal = useModalStore();
         fetch('http://localhost:8000/sanctum/csrf-cookie');
         async function handleRegister() {
@@ -23,12 +25,17 @@ export default defineComponent({
                     'Content-Type': 'application/json'
                 }
             });
-                const result = await response.json();
-                if (result.error) {
-                    errorAuth.value = result.error;
-                }else{
-                    modal.value = 'login';
-                }
+            const result = await response.json();
+            if (result.error) {
+                errorAuth.value = result.error;
+                } else {
+                modal.value = 'login';
+                flashSuccess.setFlashSuccess(result.message);
+                errorAuth.value = '';
+                setTimeout(() => {
+                    flashSuccess.setFlashSuccess('');
+                },3000)
+            }
         }
 
         async function handleLogin() {
@@ -45,24 +52,28 @@ export default defineComponent({
                 }
             });
             const result = await response.json();
-            let d = new Date();
+            if (result.error) {
+                errorAuth.value = result.error;
+            }else{
+                let d = new Date();
             d.setTime(d.getTime() + 60 * 60 * 1000);
             let expires = "expires=" + d.toUTCString();
-            document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, }) + ";" + expires+";path=/";
-            if(result.error){
-                errorAuth.value = result.error;
+            document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, }) + ";" + expires + ";path=/";
+            flashSuccess.setFlashSuccess(result.message);
+            setTimeout(() => {
+                window.location.reload();
+            },3000);
             }
 
         }
-
-        return { modal, name, email, password, password_confirmation, resident_number, isModal, handleRegister, handleLogin };
+        return { modal, name, email, password, password_confirmation, resident_number, isModal, errorAuth,handleRegister, handleLogin };
     },
 })
 
 </script>
 <template>
     <div :class="'z-50 fixed  -translate-x-1/2 left-1/2 ' + isModal.position">
-        <main v-if="modal == 'signup'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
+        <main v-if="modal == 'signup'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-[25rem]">
             <div class="flex mb-6">
                 <button class="w-1/2 py-2 bg-teal-500 text-white font-bold rounded-l-lg">Sign Up</button>
                 <button @click="modal = 'login'"
@@ -87,15 +98,16 @@ export default defineComponent({
                     <input type="password" v-model="password" placeholder="Set A Password*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
-                <div class="mb-6">
+                <div class="mb-4">
                     <input type="password" v-model="password_confirmation" placeholder="Confirm Password*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
+                <div class="text-red-600 text-[13px] font-bold mb-4">{{ errorAuth }}</div>
                 <button type="submit" class="w-full py-2 bg-teal-500 text-white font-bold rounded">GET STARTED</button>
             </form>
         </main>
 
-        <main v-if="modal == 'login'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-80">
+        <main v-if="modal == 'login'" class="bg-gray-900 p-8 rounded-lg shadow-lg w-[25rem]">
             <div class="flex mb-6">
                 <button @click="modal = 'signup'"
                     class="w-1/2 py-2  text-gray-400 font-bold rounded-l-lg bg-gray-700">Sign Up</button>
@@ -115,6 +127,7 @@ export default defineComponent({
                     <input v-model="password" required type="password" placeholder="Password*"
                         class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded">
                 </div>
+                <div class="text-red-600 text-[13px] font-bold mb-4">{{ errorAuth }}</div>
                 <button type="submit" class="w-full py-2 bg-teal-500 text-white font-bold rounded">LOGIN</button>
             </form>
         </main>

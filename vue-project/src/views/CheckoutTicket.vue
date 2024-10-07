@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useFlashMessageSuccess } from '../utils/pinia/flashMessageSuccess';
+import { ref } from 'vue';
 const props = defineProps({
     id: { type: String, required: true }
 });
 const detailMovie = ref<any>({});
+const flashSuccess=useFlashMessageSuccess();
 const [cinemas, price, seat, time, theater, date, provider, cookieUser] = [ref<any>(), ref<number>(0), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>(""), ref()];
 const [dynamicTicket, totalTicket] = [ref<number>(1), ref<number>(1)];
 
@@ -78,6 +80,11 @@ async function handleBuyTicket() {
         }
     });
     const result = await res.json();
+    flashSuccess.setFlashSuccess(result);
+    setTimeout(() => {
+        flashSuccess.setFlashSuccess('');
+        window.history.back();
+    },3000)
 }
 </script>
 <template>
