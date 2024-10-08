@@ -13,3 +13,12 @@ export const useModalStore = defineStore('modal', {
       }
     },
   })
+  let cookieUser:any = decodeURIComponent(document.cookie).split('=');
+  cookieUser=cookieUser.map((c: any, i: number) => {
+    if (c == 'User') return JSON.parse(cookieUser[i + 1])
+})
+  export const useCookieUser = defineStore('cookieUser', {
+    state: () => ({ value:cookieUser[0] }),
+  })
+
+  

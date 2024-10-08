@@ -27,27 +27,29 @@ class AuthUserController extends Controller
         }
     }
 
-    public function login(Request $request){
-        try{
-        $validated=$request->validate([
-            'resident_number'=>'integer',
-            'email'=>'email:rfc,dns',
-            'password'=>'alpha_num:ascii',
-        ]);
-        if(Auth::attempt($validated)){
-            $user=Auth::user();
-            return response()->json(['message'=>"Login successfull!",'data'=>$user],200);
+    public function login(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'resident_number' => 'integer',
+                'email' => 'email:rfc,dns',
+                'password' => 'alpha_num:ascii',
+            ]);
+            if (Auth::attempt($validated)) {
+                $user = Auth::user();
+                $ticket = $user->ticket->all();
+                return response()->json(['data'=>$user,'ticket'=>$ticket], 200);
+            }
+            return response()->json(['error' => 'The provided credentials do not match our records.'], 400);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         }
-        return response()->json(['error'=>'The provided credentials do not match our records.'],400);
     }
-    catch(\Exception $e){
-        return response()->json(['error'=>$e->getMessage()],400);
-    }
-}
 
-public function cinema($id){
-    $cinema=Cinema::find($id);
-    $cinema->time=json_decode($cinema->time);
-    return response()->json(['data'=>$cinema],200);
-}
+    public function cinema($id)
+    {
+        $cinema = Cinema::find($id);
+        $cinema->time = json_decode($cinema->time);
+        return response()->json(['data' => $cinema], 200);
+    }
 }

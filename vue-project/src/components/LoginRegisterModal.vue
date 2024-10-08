@@ -55,10 +55,11 @@ export default defineComponent({
             if (result.error) {
                 errorAuth.value = result.error;
             }else{
+            const ticketMovieId=result.ticket.map((item:any)=>item.movie_id);
                 let d = new Date();
             d.setTime(d.getTime() + 60 * 60 * 1000);
             let expires = "expires=" + d.toUTCString();
-            document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, }) + ";" + expires + ";path=/";
+            document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket:ticketMovieId }) + ";" + expires + ";path=/";
             flashSuccess.setFlashSuccess(result.message);
             setTimeout(() => {
                 window.location.reload();
@@ -66,6 +67,7 @@ export default defineComponent({
             }
 
         }
+        
         return { modal, name, email, password, password_confirmation, resident_number, isModal, errorAuth,handleRegister, handleLogin };
     },
 })
