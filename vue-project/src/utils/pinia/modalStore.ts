@@ -17,6 +17,7 @@ export const useModalStore = defineStore('modal', {
   cookieUser=cookieUser.map((c: any, i: number) => {
     if (c == 'User') return JSON.parse(cookieUser[i + 1])
 })
+if(cookieUser[0]==undefined)cookieUser[0]={};
   export const useCookieUser = defineStore('cookieUser', {
     state: () => ({ value:cookieUser[0] }),
   })

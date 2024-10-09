@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useModalStore } from '../utils/pinia/modalStore';
-import { ref, useTemplateRef } from 'vue';
+import { useCookieUser, useModalStore } from '../utils/pinia/modalStore';
+import { ref } from 'vue';
 
-const [movie,video,playVideo,cookieUser] = [ref<any>({}),ref<any>({}),ref<boolean>(false),ref<any>(null)];
+const [movie, video, playVideo, checkIdTicket] = [ref<any>({}), ref<any>({}), ref<boolean>(false), ref()];
+const cookieUser = useCookieUser();
 const props = defineProps({
   id: { type: String, required: true },
 });
@@ -24,7 +25,8 @@ async function fetchAPI(id: string) {
   resVideo = resVideo[resVideo.length - 1];
   movie.value = result;
   video.value = resVideo;
-  cookieUser.value = decodeURIComponent(document.cookie);
+  const idMovieUser = cookieUser.value.ticket;
+  checkIdTicket.value = idMovieUser.find((idMovie: number) => idMovie == result.id);
 };
 function playTrailer() {
   playVideo.value = !playVideo.value;
@@ -53,7 +55,9 @@ fetchAPI(props.id);
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen></iframe>
     <button class="bg-red-500 p-3" @click="playTrailer()">Klik</button>
-    <router-link :to="`/checkout/${movie.id}`" v-if="cookieUser!=null&&cookieUser.length>0" class="bg-red-600 p-3">Buy Ticket</router-link>
-    <button v-if="cookieUser!=null&&cookieUser.length==0" @click="modal.open('top-[4.5rem]')" class="bg-red-600 p-3">Buy Ticket</button>
+    <router-link :to="`/checkout/${movie.id}`" v-if="cookieUser.value.id&&!checkIdTicket" class="bg-red-600 p-3">Buy
+      Ticket</router-link>
+      <button v-else-if="checkIdTicket" class="bg-red-600 p-3 cursor-not-allowed">Buy Ticket</button>
+    <button v-else @click="modal.open('top-[4.5rem]')" class="bg-red-600 p-3">Buy Ticket</button>
   </div>
 </template>

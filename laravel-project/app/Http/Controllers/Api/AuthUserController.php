@@ -38,7 +38,7 @@ class AuthUserController extends Controller
             if (Auth::attempt($validated)) {
                 $user = Auth::user();
                 $ticket = $user->ticket->all();
-                return response()->json(['data'=>$user,'ticket'=>$ticket], 200);
+                return response()->json(['message'=>'Login success!','data'=>$user,'ticket'=>$ticket], 200);
             }
             return response()->json(['error' => 'The provided credentials do not match our records.'], 400);
         } catch (\Exception $e) {
