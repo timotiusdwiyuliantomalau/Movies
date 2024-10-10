@@ -5,9 +5,9 @@ const props = defineProps({
     id: { type: String, required: true }
 });
 const detailMovie = ref<any>({});
-const flashSuccess=useFlashMessageSuccess();
+const flashSuccess = useFlashMessageSuccess();
 const [cinemas, price, seat, time, theater, date, provider, cookieUser] = [ref<any>(), ref<number>(0), ref<any[]>([]), ref<any>(""), ref<any>(""), ref<any>(""), ref<any>(""), ref()];
-const [dynamicTicket, totalTicket] = [ref<number>(1), ref<number>(1)];
+const [dynamicTicket, totalTicket, errorBuy] = [ref<number>(1), ref<number>(1), ref<any>()];
 
 async function fetchMovie(id: string) {
     const res = await fetch(`https://api.themoviedb.org/3/movie/${id}`, {
@@ -22,7 +22,6 @@ async function fetchMovie(id: string) {
     cookieUser.value.map((c: any, i: number) => {
         if (c == 'User') cookieUser.value = JSON.parse(cookieUser.value[i + 1])
     })
-
 }
 fetchMovie(props.id);
 async function changeId(event: any) {
@@ -72,19 +71,25 @@ async function handleBuyTicket() {
             theater: theater.value,
             user_id: cookieUser.value.id,
             total_ticket: price.value / cinemas.value.price,
-            movie_id: props.id,
             price: price.value,
+            detail_movie: JSON.stringify(detailMovie.value),
         }),
         headers: {
             'Content-Type': 'application/json'
         }
     });
     const result = await res.json();
-    flashSuccess.setFlashSuccess(result);
+    if (result.error) return errorBuy.value = result.error;
+    cookieUser.value.ticket.push(detailMovie.value.id)
+    let d = new Date();
+    d.setTime(d.getTime() + 60 * 60 * 1000);
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket:cookieUser.value.ticket  }) + ";" + expires + ";path=/";
+    flashSuccess.setFlashSuccess(result.message);
     setTimeout(() => {
         flashSuccess.setFlashSuccess('');
-        window.history.back();
-    },3000)
+        window.location.href=`/`;
+    }, 3000)
 }
 </script>
 <template>
@@ -144,11 +149,12 @@ async function handleBuyTicket() {
                         </span>
                     </div>
                     <div>
-                        Price : ${{ Math.round(price*100)/100 }}
+                        Price : ${{ Math.round(price * 100) / 100 }}
                     </div>
                 </div>
 
                 <button type="submit">Buy</button>
+                <p v-if="errorBuy" class="text-red-500 font-semibold text-md">*{{ errorBuy }}</p>
             </form>
         </main>
     </div>

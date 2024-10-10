@@ -35,7 +35,7 @@ export default defineComponent({
       </main>
       <main class="flex flex-wrap gap-10 bg-[rgb(31,21,21)]">
         <div v-for="movie in movieList" :key="movie.id">
-          <div v-if="cookieUser.value.ticket">
+          
             <router-link :to="{ name: 'detail', params: { id: movie.id } }" class="relative">
               <div v-for="(movieId, index) in cookieUser.value.ticket" :key="index">
                 <img class="w-[15rem] absolute rotate-[30deg] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
@@ -45,7 +45,17 @@ export default defineComponent({
               <p class="text-white">{{ movie.title }}</p>
               <p>{{ movie.release_date }}</p>
             </router-link>
-          </div>
+          <!-- <div v-else>
+            <router-link :to="{ name: 'detail', params: { id: movie.id } }" class="relative">
+              <div v-for="(movieId, index) in cookieUser.value.ticket" :key="index">
+                <img class="w-[15rem] absolute rotate-[30deg] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+                  src="/sold-image.png" v-if="movieId == movie.id" alt="">
+              </div>
+              <img class="w-72" :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="">
+              <p class="text-white">{{ movie.title }}</p>
+              <p>{{ movie.release_date }}</p>
+            </router-link>
+          </div> -->
         </div>
       </main>
 

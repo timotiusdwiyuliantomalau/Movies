@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained(
                 table: 'users', indexName: 'tickets_user_id'
             );
-            $table->bigInteger('movie_id');
+            $table->json('detail_movie');
             $table->json('seat');
             $table->string('theater');
             $table->float('price');
