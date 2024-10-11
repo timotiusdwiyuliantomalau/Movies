@@ -28,13 +28,13 @@ export default defineComponent({
             const result = await response.json();
             if (result.error) {
                 errorAuth.value = result.error;
-                } else {
+            } else {
                 modal.value = 'login';
                 flashSuccess.setFlashSuccess(result.message);
                 errorAuth.value = '';
                 setTimeout(() => {
                     flashSuccess.setFlashSuccess('');
-                },3000)
+                }, 3000)
             }
         }
 
@@ -54,21 +54,21 @@ export default defineComponent({
             const result = await response.json();
             if (result.error) {
                 errorAuth.value = result.error;
-            }else{
-            const ticketMovieId=result.ticket.map((item:any)=>item.movie_id);
+            } else {
+                const ticketMovieId = result.ticket.map((item: any) => JSON.parse(item.detail_movie).id);
                 let d = new Date();
-            d.setTime(d.getTime() + 60 * 60 * 1000);
-            let expires = "expires=" + d.toUTCString();
-            document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket:ticketMovieId }) + ";" + expires + ";path=/";
-            flashSuccess.setFlashSuccess(result.message);
-            setTimeout(() => {
-                window.location.reload();
-            },3000);
+                d.setTime(d.getTime() + 60 * 60 * 1000);
+                let expires = "expires=" + d.toUTCString();
+                document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket: ticketMovieId }) + ";" + expires + ";path=/";
+                flashSuccess.setFlashSuccess(result.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
             }
 
         }
-        
-        return { modal, name, email, password, password_confirmation, resident_number, isModal, errorAuth,handleRegister, handleLogin };
+
+        return { modal, name, email, password, password_confirmation, resident_number, isModal, errorAuth, handleRegister, handleLogin };
     },
 })
 

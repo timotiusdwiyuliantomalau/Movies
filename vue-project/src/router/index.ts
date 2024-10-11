@@ -27,7 +27,8 @@ const router = createRouter({
     },
     {
       path:"/my-ticket",
-      name:"",
+      name:"my ticket",
+      props:true,
       component:MyTIcket,
     },
     {
