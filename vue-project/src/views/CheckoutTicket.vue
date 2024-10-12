@@ -25,7 +25,7 @@ async function fetchMovie(id: string) {
 }
 fetchMovie(props.id);
 async function changeId(event: any) {
-    const res = await fetch(`http://localhost:8000/api/cinema/${event.target.value}`);
+    const res = await fetch(`http://localhost:8000/api/cinema/${event.target.id}`);
     const result = await res.json();
     let data: any = { theater: [], seat: [] };
     for (let i = 0; i < result.data.theater; i++) {
@@ -84,77 +84,106 @@ async function handleBuyTicket() {
     let d = new Date();
     d.setTime(d.getTime() + 60 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
-    document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket:cookieUser.value.ticket  }) + ";" + expires + ";path=/";
+    document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket: cookieUser.value.ticket }) + ";" + expires + ";path=/";
     flashSuccess.setFlashSuccess(result.message);
     setTimeout(() => {
         flashSuccess.setFlashSuccess('');
-        window.location.href=`/`;
+        window.location.href = `/`;
     }, 3000)
 }
 </script>
 <template>
-    <div class="flex gap-12">
-        <main class="w-72">
-            <h1>{{ detailMovie.title }}</h1>
-            <img class="w-full" :src="`https://image.tmdb.org/t/p/original/${detailMovie.poster_path}`" alt="">
+    <div class="flex gap-12 bg-custom-linear justify-center p-5 pb-[10rem]">
+        <main class="w-[13rem]">
+            <h1 class="text-2xl font-bold text-center">{{ detailMovie.title }}</h1>
+            <img class="w-full rounded-lg mt-2" :src="`https://image.tmdb.org/t/p/original/${detailMovie.poster_path}`"
+                alt="">
             <span class="flex justify-between">
-                <p>{{ detailMovie.runtime }} min</p>
-                <p>{{ detailMovie.vote_average }}</p>
+                <span class="flex gap-2 items-center">
+                    <i class="bi bi-clock text-white"></i>
+                    <p class="text-white text-sm">{{ detailMovie.runtime }} min</p>
+                </span>
+                <span class="relative">
+                    <i class="bi bi-star-fill text-2xl text-yellow-500 "></i>
+                    <p
+                        class="text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-[12px]">
+                        {{ detailMovie.vote_average }}</p>
+                </span>
+
             </span>
         </main>
         <main>
-            <form @submit.prevent="handleBuyTicket()">
+            <form class="flex flex-col gap-4" @submit.prevent="handleBuyTicket()">
+
                 <div>
-                    <span>
-                        <label for="cinema">Cinema</label>
-                        <select @change="changeId" id="cinema">
-                            <option value="">Select Cinema</option>
-                            <option value=1>XXI</option>
-                            <option value=2>CGV</option>
-                            <option value=3>Cinepolis</option>
-                        </select>
-                    </span>
-                    <span>
-                        <input v-model="date" type="date" name="" id="">
-                    </span>
+                    <p class="text-white">Choose the cinema :</p>
+                    <div class="flex gap-3 cursor-pointer">
+                        <div @click="changeId" id=1
+                            class="bg-yellow-500 text-white font-bold hover:opacity-80 py-1 px-4 rounded">
+                            XXI
+                        </div>
+                        <div @click="changeId" id=2
+                            class="bg-red-600 text-white font-bold hover:opacity-80 py-1 px-4 rounded">
+                            CGV
+                        </div>
+                        <div @click="changeId" id=3
+                            class="bg-blue-700 text-white font-bold hover:opacity-80 py-1 px-4 rounded">
+                            Cinépolis
+                        </div>
+                    </div>
                 </div>
+
                 <div v-if="cinemas != null" class="flex flex-col">
-                    <div class="flex gap-5">
+                    <span class="flex gap-10">
                         <div>
-                            <div v-for="(cinema, index) in cinemas.time" :key="index" class="">
+                            <p class="text-white">Choose the time :</p>
+                            <div class="text-white flex gap-2" v-for="(cinema, index) in cinemas.time" :key="index" >
                                 <input v-model="time" type="radio" :value="cinema" :id="index.toString()">
                                 <label :for="index.toString()">{{ cinema }}</label>
                             </div>
                         </div>
-                        <select v-model="theater" id="theater">
-                            <option v-for="(theater, index) in cinemas.theater" :key="index" :value="theater">{{ theater
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <span class="grid gap-3 grid-cols-8 p-3">
+
+                        <div class="flex flex-col gap-5">
+                            <span>
+                                <p class="text-white">Set the date :</p>
+                                <div>
+                                    <input class="rounded-md bg-yellow-500" v-model="date" type="date" name="" id="">
+                                </div>
+                            </span>
+                            <select class="rounded-md" v-model="theater" id="theater">
+                                <option disabled value="" selected>Select theater</option>
+                                <option v-for="(theater, index) in cinemas.theater" :key="index" :value="theater">{{
+                                    theater
+                                    }}
+                                </option>
+                            </select>
+                        </div>
+                    </span>
+                    <div class="mt-5 ">
+                        <p class="text-white mb-1">Select your seat :</p>
+                        <span class="grid gap-3 grid-cols-8 p-3 bg-[rgb(59,18,18)] text-white mb-4 rounded-md">
                             <p @click="setSeat"
-                                :class="'w-6 h-6 text-center rounded-md hover:bg-yellow-400 cursor-pointer'"
+                                :class="'w-6 h-6  text-center rounded-md hover:bg-yellow-400 cursor-pointer'"
                                 v-for="(seats, index) in cinemas.total_seat" :key="index">{{ seats }}</p>
                         </span>
                     </div>
-                    <div class="flex gap-10">
+                    <div class="flex gap-10 text-white">
                         <p>Total Ticket</p>
-                        <span class="flex">
+                        <span class="flex cursor-pointer gap-2">
                             <p @click="if (totalTicket != 1) { totalTicket--; dynamicTicket--; price = cinemas.price * totalTicket }"
                                 v-if="dynamicTicket > 0">- </p>
                             <p>{{ totalTicket }}</p>
                             <p @click="totalTicket++; dynamicTicket++; price = cinemas.price * totalTicket">+</p>
                         </span>
                     </div>
-                    <div>
-                        Price : ${{ Math.round(price * 100) / 100 }}
+                    <div class="text-yellow-500 font-bold flex gap-3 text-xl">
+                        <span>Price</span>
+                        :
+                        <span>${{ Math.round(price * 100) / 100 }}</span>
                     </div>
                 </div>
-
-                <button type="submit">Buy</button>
-                <p v-if="errorBuy" class="text-red-500 font-semibold text-md">*{{ errorBuy }}</p>
+                <button class=" text-black bg-yellow-500 rounded-md py-1 text-xl font-bold opacity-65 hover:opacity-100" type="submit">Buy</button>
+                <p v-if="errorBuy" class="text-red-700 font-bold text-md">*{{ errorBuy }}</p>
             </form>
         </main>
     </div>
