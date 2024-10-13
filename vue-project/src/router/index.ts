@@ -4,6 +4,7 @@ import DetailMovie from '@/views/DetailMovie.vue';
 import NotFound from '@/views/NotFound.vue';
 import CheckoutTicket from '@/views/CheckoutTicket.vue';
 import MyTIcket from '@/views/MyTicket.vue';
+import MyProfile from '@/views/MyProfile.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
       name:"my ticket",
       props:true,
       component:MyTIcket,
+    },
+    {
+      path:"/my-profile",
+      name:"my profile",
+      component:MyProfile,
     },
     {
       path:'/:catchAll(.*)',

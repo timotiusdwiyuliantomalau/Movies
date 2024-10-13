@@ -20,7 +20,7 @@ export default defineComponent({
             <i @click="url = '/'"
                 :class="`cursor-pointer bi bi-house-door-fill ${url == '/' ? 'text-white' : ''} opacity-100`"></i>
         </router-link>
-        <router-link v-if="cookieUser.value.id" to="/account">
+        <router-link v-if="cookieUser.value.id" :to="{name:'my profile'}">
             <i @click="url = '/account'"
                 :class="`cursor-pointer bi bi-person-fill ${url == '/account' ? 'text-white' : ''} opacity-100`"></i>
         </router-link>

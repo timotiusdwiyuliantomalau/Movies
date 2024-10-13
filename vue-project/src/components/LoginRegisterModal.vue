@@ -59,7 +59,7 @@ export default defineComponent({
                 let d = new Date();
                 d.setTime(d.getTime() + 60 * 60 * 1000);
                 let expires = "expires=" + d.toUTCString();
-                document.cookie = "User=" + JSON.stringify({ id: result.data.id, name: result.data.name, ticket: ticketMovieId }) + ";" + expires + ";path=/";
+                document.cookie = "User=" + JSON.stringify({ id: result.data.id,email:result.data.email, name: result.data.name, ticket: ticketMovieId, resident_number:result.data.resident_number, }) + ";" + expires + ";path=/";
                 flashSuccess.setFlashSuccess(result.message);
                 setTimeout(() => {
                     window.location.reload();
