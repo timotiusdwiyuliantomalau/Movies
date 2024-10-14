@@ -15,7 +15,7 @@ function closeModal() {
 <template>
   <div class="relative">
     <div v-if="flashSuccess.message.length > 0"
-      class="flex scale-110 items-center p-2  text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 z-50 top-5 -translate-x-1/2 left-1/2 fixed"
+      class="flex scale-110 items-center p-2  text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 z-[90] top-5 -translate-x-1/2 left-1/2 fixed"
       role="alert">
       <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
         fill="currentColor" viewBox="0 0 20 20">
