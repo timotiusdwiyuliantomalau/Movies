@@ -56,5 +56,38 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`, {
       <img src="/bg-web.jpg" class=" top-0 left-0 absolute blur-sm h-full w-full" alt="">
     </main>
 
+    <main class="bg-gradient-to-b from-black to-[rgb(31,21,21)] to-[2%] items-center flex flex-col gap-[5rem] pt-[4rem]">
+      <main class="grid gap-5" v-if="movieSearch">
+        <h2 class="text-yellow-500 text-2xl text-left w-screen pl-[4rem]">Hasil pencarian "{{ search }}" :</h2>
+        <div class="flex flex-wrap gap-10  justify-center">
+          <div v-for="(movie, i) in movieSearch" :key="i">
+            <router-link :to="{ name: 'detail', params: { id: movie.id } }" class="relative">
+              <div v-for="(movieId, index) in cookieUser.value.ticket" :key="index">
+                <img class="w-[15rem] absolute rotate-[30deg] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+                  src="/sold-image.png" v-if="movieId == movie.id" alt="">
+              </div>
+              <img class="w-72" :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="">
+              <p class="text-white text-xl font-semibold text-center">{{ movie.title }}</p>
+            </router-link>
+          </div>
+        </div>
+      </main>
+
+      <main class="grid gap-8">
+        <h2 class="text-yellow-500 font-bold text-2xl text-center tracking-widest">MOVIE NOW PLAYING</h2>
+        <div class="flex flex-wrap justify-center gap-10">
+          <div class="" v-for="movie in movieList" :key="movie.id">
+            <router-link :to="{ name: 'detail', params: { id: movie.id } }" class="relative">
+              <div v-for="(movieId, index) in cookieUser.value.ticket" :key="index">
+                <img class="w-[15rem] absolute rotate-[30deg] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+                  src="/sold-image.png" v-if="movieId == movie.id" alt="">
+              </div>
+              <img class="w-72" :src="'https://image.tmdb.org/t/p/original/' + movie.poster_path" alt="">
+              <p class="text-white text-xl font-semibold text-center ">{{ movie.title }}</p>
+            </router-link>
+          </div>
+        </div>
+      </main>
+    </main>
   </div>
 </template>
