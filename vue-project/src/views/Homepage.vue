@@ -128,7 +128,7 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
         </div>
       </main>
 
-      <main class="grid gap-12">
+      <main class="grid gap-[5em]">
         <h2
           class="text-yellow-500 font-bold justify-center items-center tracking-widest flex items-center gap-8"
         >
