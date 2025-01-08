@@ -88,7 +88,7 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
     </main>
 
     <main
-      class="bg-gradient-to-b from-black to-[rgb(31,21,21)] to-[2%] items-center flex flex-col gap-[5rem] pt-[4rem]"
+      class="bg-custom-linear items-center flex flex-col gap-[5rem] pt-[4rem]"
     >
       <main class="grid gap-5" v-if="movieSearch">
         <h2 class="text-yellow-500 text-2xl text-left w-screen pl-[4rem]">
@@ -128,11 +128,11 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
         </div>
       </main>
 
-      <main class="grid gap-8">
+      <main class="grid gap-12">
         <h2
-          class="text-yellow-500 font-bold text-2xl text-center tracking-widest"
+          class="text-yellow-500 font-bold justify-center items-center tracking-widest flex items-center gap-8"
         >
-          MOVIE NOW PLAYING
+          <span class="text-white text-5xl">MOVIE</span> <span class="text-4xl">|</span> <span class="flex flex-col text-2xl"><span>NOW</span> <span>PLAYING</span></span> 
         </h2>
         <div class="flex flex-wrap justify-center gap-10">
           <div class="" v-for="movie in movieList" :key="movie.id">
@@ -152,7 +152,7 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
                 />
               </div>
               <img
-                class="w-72"
+                class="w-72 rounded-3xl border-2 border-yellow-500"
                 :src="
                   'https://image.tmdb.org/t/p/original/' + movie.poster_path
                 "
