@@ -15,7 +15,7 @@ export default defineComponent({
 </script>
 <template>
     <main
-        class="fixed  scale-125 bottom-5 left-1/2 -translate-x-1/2 bg-red-700 px-2 py-1 flex gap-4 rounded-l-full rounded-r-full opacity-40 hover:opacity-100">
+        class="fixed  scale-125 bottom-5 left-1/2 -translate-x-1/2 bg-red-700 px-2 py-1 flex gap-4 rounded-l-full rounded-r-full opacity-70 hover:opacity-100">
         <router-link to="/">
             <i @click="url = '/'"
                 :class="`cursor-pointer bi bi-house-door-fill ${url == '/' ? 'text-white' : ''} opacity-100`"></i>
