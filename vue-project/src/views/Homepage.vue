@@ -118,7 +118,9 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
                 "
                 alt=""
               />
-              <p class="text-white text-xl font-semibold text-center">
+              <p
+                class="text-white text-xl font-semibold text-center w-72 "
+              >
                 {{ movie.title }}
               </p>
             </router-link>
@@ -156,7 +158,9 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
                 "
                 alt=""
               />
-              <p class="text-white text-xl font-semibold text-center">
+              <p
+                class="text-white text-xl font-semibold text-center w-72 "
+              >
                 {{ movie.title }}
               </p>
             </router-link>
