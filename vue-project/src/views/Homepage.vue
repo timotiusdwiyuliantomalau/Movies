@@ -112,7 +112,7 @@ https://api.themoviedb.org/3/search/movie?query=${this.search}&page=1`,
                 />
               </div>
               <img
-                class="w-72"
+                class="w-72 rounded-3xl border-2 border-yellow-500"
                 :src="
                   'https://image.tmdb.org/t/p/original/' + movie.poster_path
                 "
